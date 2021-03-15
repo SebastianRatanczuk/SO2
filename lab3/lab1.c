@@ -46,51 +46,6 @@ int isUser(struct utmpx* account){
         return 0;
 }
 
-void printUser(struct utmpx* user){
-
-    printf("%s\t",user->ut_user); 
-}
-
-void printHost(struct utmpx* user){
-     
-    printf("(%s)\t",user->ut_host);
-}
-
-void getGroup(struct utmpx* user){
-
-    int numberOfGroups = 0;
-    struct passwd *paswd;    
-
-    paswd = getpwnam(user->ut_user);
-    gid_t *groups = malloc(sizeof(*groups) * numberOfGroups);
-    
-    if (getgrouplist(user->ut_user, paswd->pw_gid, groups, &numberOfGroups) == -1) {
-
-        free(groups);
-        groups = malloc(sizeof(*groups) * numberOfGroups);
-
-        if (getgrouplist(user->ut_user, paswd->pw_gid, groups, &numberOfGroups) == -1) {
-            exit(EXIT_FAILURE);
-        } 
-    }  
-    
-    printGroup(groups,numberOfGroups);
-}
-
-void printGroup(gid_t * groups,int numberOfGroup){
-
-    struct group *group;
-    printf("[");
-    for (int j = 0; j < numberOfGroup; j++) {
-        group = getgrgid(groups[j]);
-        if (group != NULL)
-            printf("%s", group->gr_name);
-        printf(", ");
-    }
-    printf("]");
-    free(groups);
-}
-
 int main(int argc, char *argv[])
 {    
     int opt;    
