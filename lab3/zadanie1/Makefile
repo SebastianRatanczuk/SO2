@@ -2,8 +2,8 @@
 # Sebastian Ratańczuk
 # rs44476@zut.edu.pl 
 
-lab.out : libtest.a rs44476.ps.lab03.static.main.o
-	gcc rs44476.ps.lab03.static.main.o -o lab.out -L. -ltest
+lab.out : libtest.a rs44476.ps.lab03.static.main.c
+	gcc rs44476.ps.lab03.static.main.c -o lab.out -L. -ltest
 
 libtest.a : rs44476.ps.lab03.static.lib.o
 	ar cr libtest.a rs44476.ps.lab03.static.lib.o
