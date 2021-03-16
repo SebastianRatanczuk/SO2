@@ -9,44 +9,51 @@
 #include <stdio.h>
 #include <grp.h>
 
-void printGroup(gid_t * ,int );
+struct GroupList
+{
+    gid_t *groups;
+    int numberOfGroups;
+};
+
+void printGroup(struct GroupList);
 
 void printHost(struct utmpx* user){
      
     printf("(%s)\t",user->ut_host);
 }
 
-void getGroup(struct utmpx* user){
+struct GroupList getGroup(struct utmpx* user){
 
-    int numberOfGroups = 0;
+    struct GroupList groupList;
+    groupList.numberOfGroups = 0;
     struct passwd *paswd;    
 
     paswd = getpwnam(user->ut_user);
-    gid_t *groups = malloc(sizeof(*groups) * numberOfGroups);
+    groupList.groups = malloc(sizeof(*groupList.groups) * groupList.numberOfGroups);
     
-    if (getgrouplist(user->ut_user, paswd->pw_gid, groups, &numberOfGroups) == -1) {
+    if (getgrouplist(user->ut_user, paswd->pw_gid, groupList.groups, &groupList.numberOfGroups) == -1) {
 
-        free(groups);
-        groups = malloc(sizeof(*groups) * numberOfGroups);
+        free(groupList.groups);
+        groupList.groups = malloc(sizeof(*groupList.groups) * groupList.numberOfGroups);
 
-        if (getgrouplist(user->ut_user, paswd->pw_gid, groups, &numberOfGroups) == -1) {
+        if (getgrouplist(user->ut_user, paswd->pw_gid, groupList.groups, &groupList.numberOfGroups) == -1) {
             exit(EXIT_FAILURE);
         } 
     }  
     
-    printGroup(groups,numberOfGroups);
+    return groupList;
 }
 
-void printGroup(gid_t * groups,int numberOfGroup){
+void printGroup(struct GroupList list){
 
     struct group *group;
     printf("[");
-    for (int j = 0; j < numberOfGroup; j++) {
-        group = getgrgid(groups[j]);
+    for (int j = 0; j < list.numberOfGroups; j++) {
+        group = getgrgid(list.groups[j]);
         if (group != NULL)
             printf("%s", group->gr_name);
         printf(", ");
     }
     printf("]");
-    free(groups);
+    free(list.groups);
 }

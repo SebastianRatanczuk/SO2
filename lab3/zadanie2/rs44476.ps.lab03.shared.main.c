@@ -10,6 +10,12 @@
 #include <grp.h>
 #include <dlfcn.h>
 
+struct GroupList
+{
+    gid_t *groups;
+    int numberOfGroups;
+};
+
 int hflag=0;
 int gflag=0;
 void *handle;
@@ -17,8 +23,8 @@ void *handle;
 int isUser(struct utmpx*);
 void printUser(struct utmpx*);
 void (*printHost)(struct utmpx*);
-void (*getGroup)(struct utmpx*);
-void (*printGroup)(gid_t * ,int);
+struct GroupList (*getGroup)(struct utmpx*);
+void (*printGroup)(struct GroupList);
 
 
 
@@ -31,10 +37,15 @@ void who(){
             printUser(utmp);
 
             if(hflag)
+            {
                 printHost(utmp);
+            }
 
             if(gflag)
-                getGroup(utmp);
+            {
+                struct GroupList list = getGroup(utmp);
+                printGroup(list);
+            }
 
             printf("\n");                
         }
@@ -72,19 +83,34 @@ int main(int argc, char *argv[])
 
                 if(!dlerror())
                     hflag = 1;
+                else
+                    printf("Nie znaleziono funkcji printHost\n");
                 break;
             case 'g':
-                dlerror();        
 
+                dlerror();  
                 getGroup = dlsym(handle,"getGroup");
-                
                 if(!dlerror())
-                    gflag = 1;
+                {   
+                    printGroup = dlsym(handle,"printGroup");
+                    if(!dlerror())
+                    {                     
+                        gflag = 1;
+                    }
+                    else
+                        printf("Nie znaleziono funkcji printGroup\n"); 
+                }
+                else
+                    printf("Nie znaleziono funkcji getGroup\n");                
+                
                 break;
             default:  
                 break;                 
             }
         }    
+    }
+    else{
+        printf("Nie znaleziono biblioteki\n");
     }
     
     who();
