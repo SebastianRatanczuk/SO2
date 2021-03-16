@@ -2,11 +2,11 @@
 # Sebastian Ratańczuk
 # rs44476@zut.edu.pl 
 
-lab2.out : libtest.so.0.1
-	gcc lab1.c -ldl -o lab2.out
+rs44476.ps.lab03.shared.main.out : libtest.so.0.1
+	gcc rs44476.ps.lab03.shared.main.c -ldl -o lab2.out
 
-libtest.so.0.1 : libtest.o
-	gcc -shared -nostartfiles -fPIC libtest.o -o libtest.so.0.1
+libtest.so.0.1 : rs44476.ps.lab03.shared.lib.o
+	gcc -shared -nostartfiles -fPIC rs44476.ps.lab03.shared.lib.o -o libtest.so.0.1
 
-libtest.o : libtest.c
-	gcc -c -fPIC libtest.c
+rs44476.ps.lab03.shared.lib.o : rs44476.ps.lab03.shared.lib.c
+	gcc -c -fPIC rs44476.ps.lab03.shared.lib.c
