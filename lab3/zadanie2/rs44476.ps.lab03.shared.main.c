@@ -57,7 +57,7 @@ void printUser(struct utmpx* user){
 
 int main(int argc, char *argv[])
 {    
-    handle = dlopen("./libtest.so.0.1", RTLD_LAZY);
+    handle = dlopen("./rs44476.ps.lab03.shared.lib.so.0.1", RTLD_LAZY);
 
     int opt;  
 
