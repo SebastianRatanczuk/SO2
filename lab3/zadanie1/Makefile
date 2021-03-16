@@ -3,7 +3,7 @@
 # rs44476@zut.edu.pl 
 
 lab : libtest.a lab1.c
-	gcc lab1.c -L. -ltest
+	gcc lab1.c -o lab -L. -ltest
 
 libtest.a : lib.o
 	ar cr libtest.a lib.o

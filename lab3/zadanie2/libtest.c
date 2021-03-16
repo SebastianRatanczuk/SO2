@@ -1,15 +1,15 @@
+// PS IS1 321 LAB03
+// Sebastian Ratańczuk
+// rs44476@zut.edu.pl 
+
 #include <stdlib.h>
 #include <pwd.h>
 #include <unistd.h>
 #include <utmpx.h>
 #include <stdio.h>
 #include <grp.h>
+
 void printGroup(gid_t * ,int );
-
-void printUser(struct utmpx* user){
-
-    printf("%s\t",user->ut_user); 
-}
 
 void printHost(struct utmpx* user){
      
