@@ -8,6 +8,8 @@
 #include <utmpx.h>
 #include <stdio.h>
 #include <grp.h>
+
+
 void printGroup(gid_t * ,int );
 
 void printUser(struct utmpx* user){
